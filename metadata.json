@@ -1,0 +1,8 @@
+{
+  "name": "The Executive Game: Sopranos Poker Roguelike",
+  "description": "A Sopranos-themed poker deckbuilder roguelike inspired by Balatro. Play poker hands, assemble your mob crew, pay the weekly Vig, and survive FBI heat and rival families.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -1,0 +1,482 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+}
+
+.font-cinzel {
+  font-family: 'Cinzel', serif;
+}
+
+.font-mono-numbers {
+  font-family: 'Space Mono', monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Authentic CRT TV scanlines and curvature overlay */
+.crt-overlay::before {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.08) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
+  z-index: 40;
+  background-size: 100% 4px, 8px 100%;
+  pointer-events: none;
+}
+
+.crt-vignette::after {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: radial-gradient(circle, transparent 72%, rgba(0, 0, 0, 0.65) 100%);
+  z-index: 41;
+  pointer-events: none;
+}
+
+/* Subtle poker chip 3D border */
+.chip-shadow {
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.2), inset 0 -2px 4px rgba(0, 0, 0, 0.5), 0 4px 10px rgba(0, 0, 0, 0.6);
+}
+
+.card-shadow {
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.7), 0 8px 10px -6px rgba(0, 0, 0, 0.7);
+}
+
+/* Custom green felt pattern */
+.bg-felt {
+  background-color: #0d2818;
+  background-image: radial-gradient(#153e26 15%, transparent 16%), radial-gradient(#081a10 15%, transparent 16%);
+  background-size: 12px 12px;
+  background-position: 0 0, 6px 6px;
+}
+
+/* Card Selection and Play Bounce Keyframes */
+@keyframes card-select-bounce {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  45% {
+    transform: translateY(-28px) scale(1.06);
+  }
+  75% {
+    transform: translateY(-22px) scale(0.98);
+  }
+  100% {
+    transform: translateY(-24px) scale(1);
+  }
+}
+
+@keyframes card-play-bounce {
+  0% {
+    transform: translateY(-24px) scale(1);
+  }
+  30% {
+    transform: translateY(-38px) scale(1.1) rotate(-1.5deg);
+  }
+  65% {
+    transform: translateY(-16px) scale(1.03) rotate(1deg);
+  }
+  100% {
+    transform: translateY(-28px) scale(1.05) rotate(0deg);
+  }
+}
+
+.animate-card-bounce {
+  animation: card-select-bounce 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-card-play {
+  animation: card-play-bounce 0.38s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Floating score burst animation: drifts upward and fades out over 0.5s */
+@keyframes burst-float {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 0) scale(0.7);
+  }
+  25% {
+    opacity: 1;
+    transform: translate(-50%, -14px) scale(1.15);
+  }
+  80% {
+    opacity: 0.9;
+    transform: translate(-50%, -34px) scale(1.02);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -48px) scale(0.9);
+  }
+}
+
+.animate-burst-float {
+  animation: burst-float 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Card math sine wave floating bob and 5-degree rotation tilt */
+@keyframes card-floating-wobble {
+  0% {
+    transform: translateY(0px) rotate(-3.5deg);
+  }
+  25% {
+    transform: translateY(-4px) rotate(1.5deg);
+  }
+  50% {
+    transform: translateY(1px) rotate(4.8deg);
+  }
+  75% {
+    transform: translateY(4px) rotate(-1.5deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(-3.5deg);
+  }
+}
+
+@keyframes card-floating-wobble-selected {
+  0% {
+    transform: translateY(-28px) rotate(-3.5deg);
+  }
+  25% {
+    transform: translateY(-32px) rotate(1.5deg);
+  }
+  50% {
+    transform: translateY(-27px) rotate(4.8deg);
+  }
+  75% {
+    transform: translateY(-24px) rotate(-1.5deg);
+  }
+  100% {
+    transform: translateY(-28px) rotate(-3.5deg);
+  }
+}
+
+/* Balatro-Style Draw Animation: Flying in from off-screen top-right with rotational settling */
+@keyframes card-draw-flyin {
+  0% {
+    opacity: 0;
+    transform: translate(220px, -240px) rotate(18deg) scale(0.65);
+    filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.8));
+  }
+  65% {
+    opacity: 1;
+    transform: translate(-4px, 4px) rotate(-2.5deg) scale(1.04);
+  }
+  85% {
+    transform: translate(2px, -2px) rotate(1deg) scale(0.99);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0deg) scale(1);
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+  }
+}
+
+.animate-card-draw {
+  animation: card-draw-flyin 0.44s cubic-bezier(0.2, 0.85, 0.3, 1) both;
+}
+
+/* Balatro-Style Muck/Discard Sweep: aggressive toss into bottom-right muck pile */
+@keyframes card-muck-sweep {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0deg) scale(1);
+  }
+  30% {
+    transform: translate(-10px, -22px) rotate(-6deg) scale(1.02);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(380px, 240px) rotate(40deg) scale(0.35);
+  }
+}
+
+.animate-card-muck {
+  animation: card-muck-sweep 0.38s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  pointer-events: none;
+}
+
+/* Balatro-Style Scoring Card Pop/Pulse: snappy scale to 1.18x, gold & emerald glowing halo */
+@keyframes card-scoring-pulse {
+  0% {
+    transform: scale(1) translateY(0);
+    filter: drop-shadow(0 0 0 rgba(234, 179, 8, 0));
+  }
+  35% {
+    transform: scale(1.18) translateY(-14px);
+    filter: drop-shadow(0 0 16px rgba(250, 204, 21, 0.95)) drop-shadow(0 0 24px rgba(34, 197, 94, 0.85));
+  }
+  70% {
+    transform: scale(1.08) translateY(-8px);
+    filter: drop-shadow(0 0 10px rgba(250, 204, 21, 0.7));
+  }
+  100% {
+    transform: scale(1.06) translateY(-8px);
+    filter: drop-shadow(0 0 8px rgba(250, 204, 21, 0.6));
+  }
+}
+
+.animate-card-scoring-pulse {
+  animation: card-scoring-pulse 0.36s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  z-index: 50 !important;
+}
+
+/* Smooth Center Scoring Zone Levitation */
+@keyframes card-scoring-levitate {
+  0% {
+    opacity: 0.85;
+    transform: translateY(24px) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1.05);
+  }
+}
+
+.animate-scoring-levitate {
+  animation: card-scoring-levitate 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+/* High-Contrast Neon Accents: Bada Bing Neon Pink/Purple, Satriale's Neon Green/Cyan, and Alert Red */
+.neon-mult {
+  color: #f43f5e;
+  text-shadow: 0 0 8px rgba(244, 63, 94, 0.9), 0 0 18px rgba(236, 72, 153, 0.8), 0 0 28px rgba(217, 70, 239, 0.6);
+}
+
+.neon-mult-box {
+  border-color: rgba(244, 63, 94, 0.8);
+  box-shadow: 0 0 18px rgba(244, 63, 94, 0.4), inset 0 0 12px rgba(217, 70, 239, 0.25);
+}
+
+.neon-chips {
+  color: #38bdf8;
+  text-shadow: 0 0 8px rgba(56, 189, 248, 0.9), 0 0 16px rgba(14, 165, 233, 0.7);
+}
+
+.neon-chips-box {
+  border-color: rgba(56, 189, 248, 0.8);
+  box-shadow: 0 0 18px rgba(56, 189, 248, 0.4), inset 0 0 12px rgba(14, 165, 233, 0.25);
+}
+
+.neon-cash {
+  color: #4ade80;
+  text-shadow: 0 0 8px rgba(74, 222, 128, 0.9), 0 0 18px rgba(34, 197, 94, 0.7);
+}
+
+.neon-boss-cut {
+  color: #f87171;
+  text-shadow: 0 0 8px rgba(239, 68, 68, 0.9), 0 0 20px rgba(185, 28, 28, 0.75);
+}
+
+/* FBI Siren Strobe Animation */
+@keyframes siren-strobe {
+  0%, 100% {
+    box-shadow: 0 0 30px rgba(239, 68, 68, 0.9), inset 0 0 20px rgba(239, 68, 68, 0.4);
+    border-color: rgba(239, 68, 68, 1);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(59, 130, 246, 0.9), inset 0 0 20px rgba(59, 130, 246, 0.4);
+    border-color: rgba(59, 130, 246, 1);
+  }
+}
+
+.animate-siren-strobe {
+  animation: siren-strobe 0.8s ease-in-out infinite;
+}
+
+/* Whack / Sever Ties Toast drop animation */
+@keyframes whack-toast-drop {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -24px) scale(0.9);
+  }
+  20% {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1.05);
+  }
+  80% {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, 16px) scale(0.95);
+  }
+}
+
+/* Custom Interactive Lit Cigar Cursor */
+/* Normal State: Maduro wrapper, gold band, gray ash tip with glowing ember cherry */
+html, body, button, [role="button"], a, input, select {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='tobacco' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2363381e'/%3E%3Cstop offset='50%25' stop-color='%23422413'/%3E%3Cstop offset='100%25' stop-color='%2324140b'/%3E%3C/linearGradient%3E%3ClinearGradient id='goldBand' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23ffd700'/%3E%3Cstop offset='50%25' stop-color='%23b8860b'/%3E%3Cstop offset='100%25' stop-color='%23d4af37'/%3E%3C/linearGradient%3E%3CradialGradient id='ember' cx='35%25' cy='35%25' r='50%25'%3E%3Cstop offset='0%25' stop-color='%23ff9900'/%3E%3Cstop offset='50%25' stop-color='%23ff3b00'/%3E%3Cstop offset='100%25' stop-color='%237a7a7a'/%3E%3C/radialGradient%3E%3C/defs%3E%3C!-- Subtle smoke wisp --%3E%3Cpath d='M3 4 Q2 1 4 0 T2 -3' fill='none' stroke='rgba(220,220,220,0.45)' stroke-width='1.2' stroke-linecap='round'/%3E%3C!-- Cigar Body (Tilted 45 deg) --%3E%3Cpath d='M4 3 L23 22 A3 3 0 0 1 21 26 L2 7 Z' fill='url(%23tobacco)' stroke='%23190d07' stroke-width='0.8'/%3E%3C!-- Gold Band Ring --%3E%3Cpath d='M14 13 L17 16 L15 18 L12 15 Z' fill='url(%23goldBand)' stroke='%235c4308' stroke-width='0.5'/%3E%3C!-- Red Band Trim --%3E%3Cline x1='13' y1='12' x2='11' y2='14' stroke='%23b91c1c' stroke-width='0.8'/%3E%3C!-- Ash Tip with Ember Core --%3E%3Cpath d='M1 6 L6 1 L4 4 Z' fill='url(%23ember)' stroke='%234a4a4a' stroke-width='0.6'/%3E%3Ccircle cx='3' cy='3' r='1.2' fill='%23ff5500'/%3E%3C/svg%3E") 3 3, auto !important;
+}
+
+/* Active State (Mousedown / Dragging): Bright fiery red-orange flash on the cigar tip */
+html:active, body:active, button:active, [role="button"]:active, a:active {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='tobaccoA' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23703d20'/%3E%3Cstop offset='50%25' stop-color='%234d2815'/%3E%3Cstop offset='100%25' stop-color='%2329140a'/%3E%3C/linearGradient%3E%3ClinearGradient id='goldBandA' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23fff066'/%3E%3Cstop offset='50%25' stop-color='%23e6a100'/%3E%3Cstop offset='100%25' stop-color='%23ffd700'/%3E%3C/linearGradient%3E%3CradialGradient id='flare' cx='40%25' cy='40%25' r='50%25'%3E%3Cstop offset='0%25' stop-color='%23ffffff'/%3E%3Cstop offset='25%25' stop-color='%23ffea00'/%3E%3Cstop offset='65%25' stop-color='%23ff2200'/%3E%3Cstop offset='100%25' stop-color='%23991b1b'/%3E%3C/radialGradient%3E%3C/defs%3E%3C!-- Incandescent Aura / Glow Flare --%3E%3Ccircle cx='3' cy='3' r='5' fill='%23ff3700' opacity='0.55'/%3E%3C!-- Cigar Body --%3E%3Cpath d='M4 3 L23 22 A3 3 0 0 1 21 26 L2 7 Z' fill='url(%23tobaccoA)' stroke='%2324140b' stroke-width='0.8'/%3E%3C!-- Gold Band Ring --%3E%3Cpath d='M14 13 L17 16 L15 18 L12 15 Z' fill='url(%23goldBandA)' stroke='%23805b00' stroke-width='0.6'/%3E%3C!-- Active Burning Ash Tip with Fiery Ember Core --%3E%3Cpath d='M1 6 L6 1 L4 4 Z' fill='url(%23flare)' stroke='%23ff2200' stroke-width='0.8'/%3E%3Ccircle cx='3' cy='3' r='2.2' fill='url(%23flare)'/%3E%3C!-- Hot Flying Ash Sparks --%3E%3Ccircle cx='5' cy='1' r='0.6' fill='%23ffea00'/%3E%3Ccircle cx='1' cy='5' r='0.5' fill='%23ff5500'/%3E%3C/svg%3E") 3 3, pointer !important;
+}
+
+/* 1999 CRT Screen Shader Styles */
+.crt-micro-scanlines {
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.18) 0px,
+    rgba(0, 0, 0, 0.18) 1.5px,
+    transparent 1.5px,
+    transparent 3px
+  );
+  pointer-events: none;
+}
+
+.crt-aperture-grille {
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(255, 0, 0, 0.02) 0px,
+    rgba(0, 255, 0, 0.02) 1px,
+    rgba(0, 0, 255, 0.02) 2px,
+    transparent 3px
+  );
+  pointer-events: none;
+}
+
+.crt-tube-vignette {
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    transparent 65%,
+    rgba(0, 0, 0, 0.35) 82%,
+    rgba(0, 0, 0, 0.82) 100%
+  );
+  box-shadow: inset 0 0 70px rgba(0, 0, 0, 0.8), inset 0 0 140px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+}
+
+/* Chromatic Aberration fringe at far screen perimeters */
+.crt-chromatic-fringe {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at center,
+    transparent 72%,
+    rgba(255, 0, 60, 0.05) 86%,
+    rgba(0, 230, 255, 0.08) 100%
+  );
+  mix-blend-mode: screen;
+}
+
+/* Massive Combo Violent Rumble (>10,000 score) */
+@keyframes combo-rumble {
+  0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+  15% { transform: translate(-4px, 3px) rotate(-1.5deg) scale(1.04); }
+  30% { transform: translate(4px, -3px) rotate(1.8deg) scale(1.06); }
+  45% { transform: translate(-3px, -4px) rotate(-1.2deg) scale(1.05); }
+  60% { transform: translate(3px, 4px) rotate(1.4deg) scale(1.07); }
+  75% { transform: translate(-4px, 2px) rotate(-1.5deg) scale(1.04); }
+  90% { transform: translate(2px, -2px) rotate(0.8deg) scale(1.02); }
+  100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+}
+
+.animate-combo-rumble {
+  animation: combo-rumble 0.3s ease-in-out infinite;
+}
+
+/* Glowing Gold styling for massive jackpot hands */
+.neon-gold {
+  color: #fbbf24;
+  text-shadow: 0 0 10px rgba(251, 191, 36, 0.95), 0 0 22px rgba(245, 158, 11, 0.85), 0 0 35px rgba(217, 119, 6, 0.7);
+}
+
+.neon-gold-box {
+  border-color: rgba(251, 191, 36, 0.9);
+  box-shadow: 0 0 30px rgba(251, 191, 36, 0.7), inset 0 0 20px rgba(245, 158, 11, 0.35);
+}
+
+/* Cassette Tape Spool Spin Keyframes */
+@keyframes reel-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-reel-spin {
+  animation: reel-spin 1s linear infinite;
+}
+
+/* Falling $100 Federal Reserve note flutter */
+@keyframes bill-flutter {
+  0% {
+    opacity: 0;
+    transform: translateY(-80px) rotateX(20deg) rotateY(0deg) rotateZ(0deg) scale(0.8);
+  }
+  15% {
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(45vh) rotateX(55deg) rotateY(180deg) rotateZ(25deg) scale(1);
+  }
+  85% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(105vh) rotateX(75deg) rotateY(360deg) rotateZ(-30deg) scale(0.9);
+  }
+}
+
+.animate-bill-flutter {
+  animation: bill-flutter 4.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* Slow-sweeping harsh police siren searchlight across dark felt */
+@keyframes siren-searchlight {
+  0% {
+    transform: translate(-30%, -20%) rotate(0deg);
+    opacity: 0.35;
+  }
+  25% {
+    transform: translate(25%, 15%) rotate(45deg);
+    opacity: 0.65;
+  }
+  50% {
+    transform: translate(40%, -10%) rotate(90deg);
+    opacity: 0.4;
+  }
+  75% {
+    transform: translate(-10%, 25%) rotate(135deg);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translate(-30%, -20%) rotate(180deg);
+    opacity: 0.35;
+  }
+}
+
+.animate-siren-searchlight {
+  animation: siren-searchlight 6s linear infinite;
+}
+
+/* Gentle Pine Barrens snow drift */
+@keyframes snow-drift {
+  0% {
+    transform: translateY(-20px) translateX(-10px);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.8;
+  }
+  80% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(100vh) translateX(40px);
+    opacity: 0;
+  }
+}
+
+.animate-snow-drift {
+  animation: snow-drift 5s linear infinite;
+}
